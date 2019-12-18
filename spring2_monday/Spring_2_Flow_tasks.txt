@@ -1,0 +1,31 @@
+1.	Készíts egy saját excceptiont, legyen a neve ValidationException és származzon a RuntimeExcpetionből. Legyen egy paraméteres konstruktora ami egy string-et vár - ezt adja majd át az ősének.
+1.1.	Készíts el a követekző kivételeket amelyek a ValidationExceptionből származnak. Csak default konstruktoruk van és mind egy konstans szöveget ad át az ősének (ez szabadon megadható).
+	IdValidationException, TooLongException, MissingParameterException, InternalServerException.
+1.2.	Készíts egy DomesticTransaction osztályt, ami egy belföldi banki átualás alap adatait tartalmazza, ezek rendre: 
+	transactionId(UUID), senderName(String), hostName(String), hostAccountNumber(String), amount(Long).
+1.3.	Készíts egy Create, Read(mindkét fajtát), Delete endpointot a DomesticTransaction osztályhoz. 
+1.4.	Készíts egy Service-t az osztályhoz ahol a validációt valósítod meg, ezek rendre:
+	transactionId - legyen üres create-nél, amúgy IdValidationException
+	senderName - nem lehet üres és nem egyezhet a hostName-mel
+	hostName - nem lehet üres és nem egyezhet a senderName-mel, ezen felül nem lehet 20 karakternél hosszabb(ha valaki ráismer, hogy melyik banknál van ilyen, követekző órán elmondhatja az előadónak)
+	hostAccountNumber - xxxxxxxx-xxxxxxxx és opcionálisan még egy kötőjel és 8 számjegy, kötelező megadni, ha nincs akkor MissingParameterException, ha van de túl hosszú TooLongException, 
+				ha nem egyezik a formátum, akkor ValidationException
+	amount - nem lehet kisebb vagy egyenlő, mint 0 és nagyobb, mint 999 999 999 999
+1.5.	Készíts egy GlobalExceptionHandler osztályt, ami az egyes Exception típusokat lekezeli és specifikus státuszokkal tér vissza. Ha nem ismert hiba merül fel, akkor 500-as hibakód, különben:
+	ValidationException - 418
+	IdValidationException - 400
+	TooLongException - 411
+	MissingParameterException - 404
+	InternalServerException - 409
+1.6.	Készíts egy Repository-t, ami egy HashMap-ben tárolja az adatokat, amennyiben helyesek az adatok, tárold el őket. Valósítsd meg a CRUD műveleteket benne.
+1.7.	Írj unit teszteket a Service-hez.
+
+BONUS feladat:
+
+1.	Készíts egy InternacionalTransaction-t, ami egy nemzetközi tranzakciót valósít meg.
+1.1.	Tartalmazza a következő mezőket:
+	InternacionalTransaction: transactionId(UUID), senderName(String), hostName(String), swift(String), IBAN(String), senderAddress(Address), hostAddress(Address), amount(Long), currency(Enum).
+	Address: firstname, lastname, address1, address2, city, state, country, posalCode, phone, email. Minden string.
+1.2.	Készíts egy Create, Read(mindkét fajtát), Delete endpointot a InternacionalTransaction osztályhoz. 
+1.3.	Készíts Service-t és Repository-t. A service hasonlóan az előző feladathoz valósítsa meg a validációt a repository pedig az adattárolást.
+1.4.	Írj unit teszteket a service-hez. 
